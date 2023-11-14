@@ -102,7 +102,6 @@ class _StatisticsState extends State<Statistics>
             const Text(
               'Statistics',
               style: TextStyle(
-                color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
@@ -136,7 +135,7 @@ class _StatisticsState extends State<Statistics>
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: indexColor == index
-                              ? const Color.fromARGB(255, 47, 125, 121)
+                              ? primaryColor
                               : Colors.white,
                         ),
                         alignment: Alignment.center,
@@ -229,7 +228,7 @@ class _StatisticsState extends State<Statistics>
                 controller: _tabController,
                 indicatorColor: primaryColor,
                 labelColor: primaryColor,
-                unselectedLabelColor: Colors.black,
+                unselectedLabelColor: Colors.white,
                 tabs: const [
                   Tab(text: 'Column'),
                   Tab(text: 'Circular'),
@@ -280,7 +279,6 @@ class _StatisticsState extends State<Statistics>
                             backgroundColor: Colors.green,
                             child: Icon(
                               Icons.arrow_upward,
-                              color: Colors.black,
                               size: 19,
                             ),
                           ),
@@ -318,7 +316,6 @@ class _StatisticsState extends State<Statistics>
                             backgroundColor: Colors.red,
                             child: Icon(
                               Icons.arrow_downward,
-                              color: Colors.black,
                               size: 19,
                             ),
                           ),
@@ -365,7 +362,6 @@ class _StatisticsState extends State<Statistics>
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
-                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -375,7 +371,6 @@ class _StatisticsState extends State<Statistics>
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
-                          color: Colors.black,
                         ),
                       )
                     ],
@@ -394,7 +389,6 @@ class _StatisticsState extends State<Statistics>
                   Text(
                     'Top Spending',
                     style: TextStyle(
-                        color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),

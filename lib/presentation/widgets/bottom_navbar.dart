@@ -1,3 +1,4 @@
+import 'package:expanse_management/Constants/color.dart';
 import 'package:expanse_management/presentation/screens/add_transaction.dart';
 import 'package:expanse_management/presentation/screens/category_screen.dart';
 import 'package:expanse_management/presentation/screens/home.dart';
@@ -30,8 +31,7 @@ class _BottomState extends State<Bottom> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const AddScreen()));
         },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -59,7 +59,7 @@ class _BottomState extends State<Bottom> {
                   child: Icon(
                     Icons.home,
                     size: 30,
-                    color: indexColor == 0 ? Colors.blue : Colors.grey,
+                    color: indexColor == 0 ? primaryColor : secondaryColor,
                   ),
                 )),
             GestureDetector(
@@ -81,7 +81,7 @@ class _BottomState extends State<Bottom> {
                   child: Icon(
                     Icons.bar_chart_outlined,
                     size: 30,
-                    color: indexColor == 1 ? Colors.blue : Colors.grey,
+                    color: indexColor == 1 ? primaryColor : secondaryColor,
                   ),
                 )),
             const SizedBox(
@@ -106,7 +106,7 @@ class _BottomState extends State<Bottom> {
                   child: Icon(
                     Icons.category_outlined,
                     size: 30,
-                    color: indexColor == 2 ? Colors.blue : Colors.grey,
+                    color: indexColor == 2 ? Colors.blue : secondaryColor,
                   ),
                 )),
             GestureDetector(
@@ -125,7 +125,7 @@ class _BottomState extends State<Bottom> {
                   child: Icon(
                     Icons.search_outlined,
                     size: 30,
-                    color: indexColor == 3 ? Colors.blue : Colors.grey,
+                    color: indexColor == 3 ? Colors.blue : secondaryColor,
                   ),
                 )),
           ]),

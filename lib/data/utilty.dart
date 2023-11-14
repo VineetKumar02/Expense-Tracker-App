@@ -191,12 +191,13 @@ List time(List<Transaction> transactions, bool hour, bool day, bool month) {
 
 String formatCurrency(int value) {
   final format = NumberFormat.currency(
-    symbol: '', // Empty symbol to remove the currency symbol
-    decimalDigits: 0, // Number of decimal digits (set to 0 for VND)
-    locale: 'vi_VN', // Vietnamese locale for formatting
+    symbol: '₹', // Symbol for Indian Rupees
+    decimalDigits: 0, // Number of decimal digits
+    locale: 'en_IN', // Locale for India
   );
 
-  return '${format.format(value)}VND'; // Append ' vnđ' to the formatted value
+  return format
+      .format(value); // Returns the formatted value with the '₹' symbol
 }
 
 String getFormattedDate(int index, DateTime selectedDate) {

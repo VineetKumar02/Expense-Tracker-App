@@ -31,7 +31,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        colorScheme: const ColorScheme.dark(
+          background: Color(0xff151515),
+          primary: Colors.blue,
+          onPrimary: Colors.black,
+          primaryContainer: Colors.blue,
+          onPrimaryContainer: Colors.black,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.white),
+        ),
+        useMaterial3: true,
+      ),
       home: const Bottom(),
     );
   }

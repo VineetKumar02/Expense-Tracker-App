@@ -72,7 +72,6 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
       body: SafeArea(
           child: Stack(
         alignment: AlignmentDirectional.center,
@@ -90,7 +89,8 @@ class _AddScreenState extends State<AddScreen> {
   Container mainAddContainer() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
+        borderRadius: BorderRadius.circular(20),
+      ),
       height: 680,
       width: 360,
       child: Column(children: [
@@ -205,16 +205,15 @@ class _AddScreenState extends State<AddScreen> {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Colors.blue),
+            borderRadius: BorderRadius.circular(15), color: primaryColor),
         height: 50,
         width: 140,
         child: const Text(
           'Add',
           style: TextStyle(
-              fontFamily: 'f',
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: Colors.white),
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -228,7 +227,7 @@ class _AddScreenState extends State<AddScreen> {
         alignment: Alignment.bottomLeft,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 2, color: const Color(0xffC5C5C5))),
+            border: Border.all(width: 2)),
         width: double.infinity,
         child: TextButton(
           onPressed: () async {
@@ -244,7 +243,7 @@ class _AddScreenState extends State<AddScreen> {
           },
           child: Text(
             'Date : ${date.day}/${date.month}/${date.year}',
-            style: const TextStyle(fontSize: 15, color: Colors.black),
+            style: const TextStyle(fontSize: 15, color: Colors.white),
           ),
         ),
       ),
@@ -264,13 +263,13 @@ class _AddScreenState extends State<AddScreen> {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           labelText: 'Amount',
-          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade800),
+          labelStyle: TextStyle(fontSize: 17),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2, color: primaryColor)),
+              borderSide: const BorderSide(width: 2)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2, color: primaryColor)),
+              borderSide: const BorderSide(width: 2)),
           errorText: isAmountValid ? null : 'Amount must be greater than 0',
         ),
         onChanged: (value) {
@@ -298,7 +297,6 @@ class _AddScreenState extends State<AddScreen> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 width: 2,
-                color: Colors.blue,
               )),
           child: DropdownButton<String>(
             value: selectedTypeItem,
@@ -336,9 +334,8 @@ class _AddScreenState extends State<AddScreen> {
                 .toList(),
             hint: const Text(
               'Select Type',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.white),
             ),
-            dropdownColor: Colors.white,
             isExpanded: true,
             underline: Container(),
             onChanged: ((value) {
@@ -361,13 +358,13 @@ class _AddScreenState extends State<AddScreen> {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           labelText: 'Notes',
-          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade800),
+          labelStyle: TextStyle(fontSize: 17),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2, color: primaryColor)),
+              borderSide: const BorderSide(width: 2)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2, color: primaryColor)),
+              borderSide: const BorderSide(width: 2)),
         ),
       ),
     );
@@ -386,10 +383,7 @@ class _AddScreenState extends State<AddScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            width: 2,
-            color: Colors.blue,
-          ),
+          border: Border.all(width: 2),
         ),
         child: DropdownButton<CategoryModel>(
           value: selectedCategoryItem,
@@ -429,9 +423,8 @@ class _AddScreenState extends State<AddScreen> {
               .toList(),
           hint: const Text(
             'Select category',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.white),
           ),
-          dropdownColor: Colors.white,
           isExpanded: true,
           underline: Container(),
           onChanged: (value) {
@@ -449,9 +442,9 @@ class _AddScreenState extends State<AddScreen> {
       children: [
         Container(
           width: double.infinity,
-          height: 240,
+          height: 100,
           decoration: const BoxDecoration(
-              color: Color(0xff368983),
+              color: primaryColor,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20))),
@@ -471,19 +464,14 @@ class _AddScreenState extends State<AddScreen> {
                     },
                     child: const Icon(
                       Icons.arrow_back,
-                      color: Colors.white,
                     ),
                   ),
                   const Text(
                     "Add Transaction",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const Icon(
                     Icons.attach_file_outlined,
-                    color: Colors.white,
                   )
                 ],
               ),

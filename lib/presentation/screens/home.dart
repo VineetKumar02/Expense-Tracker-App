@@ -45,7 +45,6 @@ class _HomeState extends State<Home> {
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 19,
-                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -161,7 +160,6 @@ Stack _head() {
                       onPressed: () {},
                       icon: const Icon(
                         Icons.settings,
-                        color: Colors.white,
                       ),
                     )),
                 const Padding(
@@ -171,7 +169,6 @@ Stack _head() {
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 22,
-                        color: Colors.white,
                       ),
                     ))
               ],
@@ -209,12 +206,10 @@ Stack _head() {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
-                          color: Colors.white,
                         ),
                       ),
                       Icon(
                         Icons.more_horiz,
-                        color: Colors.white,
                       ),
                     ],
                   ),
@@ -229,7 +224,6 @@ Stack _head() {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25,
-                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -248,7 +242,6 @@ Stack _head() {
                             backgroundColor: Colors.green,
                             child: Icon(
                               Icons.arrow_upward,
-                              color: Colors.black,
                               size: 19,
                             ),
                           ),
@@ -258,7 +251,6 @@ Stack _head() {
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
-                              color: Color.fromARGB(255, 216, 216, 216),
                             ),
                           ),
                         ],
@@ -270,7 +262,6 @@ Stack _head() {
                             backgroundColor: Colors.red,
                             child: Icon(
                               Icons.arrow_downward,
-                              color: Colors.black,
                               size: 19,
                             ),
                           ),
@@ -280,7 +271,6 @@ Stack _head() {
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
-                              color: Color.fromARGB(255, 216, 216, 216),
                             ),
                           ),
                         ],
@@ -299,7 +289,6 @@ Stack _head() {
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
-                          color: Colors.white,
                         ),
                       ),
                       Text(
@@ -307,7 +296,6 @@ Stack _head() {
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
-                          color: Colors.white,
                         ),
                       ),
                     ],
