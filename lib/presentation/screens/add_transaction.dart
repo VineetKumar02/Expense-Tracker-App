@@ -7,8 +7,6 @@ import 'package:expense_tracker/domain/models/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-// import '../Constants/categories.dart';
-
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
 
@@ -84,7 +82,7 @@ class _AddScreenState extends State<AddScreen> {
         ),
       ),
       body: SafeArea(
-        child: Center(child: mainAddContainer()),
+        child: Center(child: SingleChildScrollView(child: mainAddContainer())),
       ),
     );
   }
@@ -104,7 +102,6 @@ class _AddScreenState extends State<AddScreen> {
           descriptionField(),
           const SizedBox(height: 35),
           timeField(),
-          // const Spacer(),
           const SizedBox(height: 35),
           addTransaction(),
         ],
@@ -114,28 +111,32 @@ class _AddScreenState extends State<AddScreen> {
 
   GestureDetector addTransaction() {
     bool isWarningShown = false;
+
+    void showErrorDialog(String title, String content) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         if (selectedCategoryItem == null ||
             selectedTypeItem == null ||
             explainC.text.isEmpty ||
             amountC.text.isEmpty) {
-          // Display an error message or show a snackbar indicating missing fields
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Error'),
-              content: const Text('Please fill in all the fields.'),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
+          showErrorDialog('Error', 'Please fill in all the fields.');
           return;
         }
 
@@ -143,178 +144,80 @@ class _AddScreenState extends State<AddScreen> {
         if (selectedTypeItem == 'Expense' &&
             amount > limitPerExpense &&
             !isWarningShown) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Warning'),
-              content: Text(
-                  'The amount exceeds the spending limit(${formatCurrency(limitPerExpense)}).'),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+          showErrorDialog(
+            'Warning',
+            'The amount exceeds the spending limit(${formatCurrency(limitPerExpense)}).',
           );
-          isWarningShown =
-              true; // Set the flag to true after showing the warning
+          isWarningShown = true;
           return;
         }
-        var newTransaction = Transaction(selectedTypeItem!,
-            selectedCategoryItem!, amountC.text, explainC.text, date);
+
+        var newTransaction = Transaction(
+          selectedTypeItem!,
+          selectedCategoryItem!,
+          amountC.text,
+          explainC.text,
+          date,
+        );
         boxTransaction.add(newTransaction);
         Navigator.of(context).pop();
-
-        if (selectedTypeItem == 'Expense' && totalBalance() < limitTotal) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Warning'),
-              content: Text(
-                  'Total balance is less than ${formatCurrency(limitTotal)}!'),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-          return;
-        }
       },
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: primaryColor),
+          borderRadius: BorderRadius.circular(15),
+          color: primaryColor,
+        ),
         height: 50,
         width: 140,
-        child: const Text('Add',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
-
-  Container timeField() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2, color: Colors.white)),
-      width: double.infinity,
-      child: TextButton(
-        onPressed: () async {
-          DateTime? newDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2020, 1, 1),
-              lastDate: DateTime(2030));
-          if (newDate == null) return;
-          setState(() {
-            date = newDate;
-          });
-        },
-        child: Text(
-          'Date : ${date.day}/${date.month}/${date.year}',
-          style: const TextStyle(fontSize: 15, color: Colors.white),
+        child: const Text(
+          'Add',
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 
-  TextField amountField() {
-    return TextField(
-      keyboardType: TextInputType.number,
-      focusNode: amountFocus,
-      controller: amountC,
-      decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        labelText: 'Amount',
-        labelStyle: const TextStyle(fontSize: 17),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(width: 2, color: Colors.white)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(width: 2, color: Colors.green)),
-        errorText: isAmountValid ? null : 'Amount must be greater than 0',
-      ),
-      onChanged: (value) {
-        setState(() {
-          if (value.isEmpty) {
-            isAmountValid = true; // Reset the validation if the field is empty
-          } else {
-            isAmountValid =
-                double.tryParse(value) != null && double.parse(value) > 0;
-          }
-        });
-      },
-    );
-  }
-
   Container typeField() {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        width: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 2, color: Colors.white)),
-        child: DropdownButton<String>(
-          value: selectedTypeItem,
-          items: types
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Row(children: [
-                      SizedBox(width: 40, child: Image.asset('images/$e.png')),
-                      const SizedBox(width: 10),
-                      Text(e, style: const TextStyle(fontSize: 15))
-                    ]),
-                  ))
-              .toList(),
-          selectedItemBuilder: (BuildContext context) => types
-              .map((e) => Row(
-                    children: [
-                      SizedBox(width: 40, child: Image.asset('images/$e.png')),
-                      const SizedBox(width: 10),
-                      Text(e)
-                    ],
-                  ))
-              .toList(),
-          hint:
-              const Text('Select Type', style: TextStyle(color: Colors.white)),
-          isExpanded: true,
-          underline: Container(),
-          onChanged: ((value) {
-            setState(() {
-              selectedTypeItem = value!;
-              selectedCategoryItem = null;
-            });
-          }),
-        ));
-  }
-
-  TextField descriptionField() {
-    return TextField(
-      focusNode: explainFocus,
-      controller: explainC,
-      decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        labelText: 'Description',
-        labelStyle: const TextStyle(fontSize: 17),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(width: 2, color: Colors.white)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(width: 2, color: Colors.green)),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 2, color: Colors.white),
+      ),
+      child: DropdownButton<String>(
+        value: selectedTypeItem,
+        items: types.map((e) {
+          return DropdownMenuItem(
+            value: e,
+            child: Row(
+              children: [
+                SizedBox(width: 40, child: Image.asset('images/$e.png')),
+                const SizedBox(width: 10),
+                Text(e, style: const TextStyle(fontSize: 15)),
+              ],
+            ),
+          );
+        }).toList(),
+        selectedItemBuilder: (BuildContext context) => types.map((e) {
+          return Row(
+            children: [
+              SizedBox(width: 40, child: Image.asset('images/$e.png')),
+              const SizedBox(width: 10),
+              Text(e),
+            ],
+          );
+        }).toList(),
+        hint: const Text('Select Type', style: TextStyle(color: Colors.white)),
+        isExpanded: true,
+        underline: Container(),
+        onChanged: ((value) {
+          setState(() {
+            selectedTypeItem = value!;
+            selectedCategoryItem = null;
+          });
+        }),
       ),
     );
   }
@@ -332,37 +235,29 @@ class _AddScreenState extends State<AddScreen> {
       ),
       child: DropdownButton<CategoryModel>(
         value: selectedCategoryItem,
-        items: currCategories
-            .map(
-              (e) => DropdownMenuItem<CategoryModel>(
-                value: e,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 40,
-                      child: Image.asset('images/${e.categoryIcon}'),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(e.title, style: const TextStyle(fontSize: 15))
-                  ],
-                ),
-              ),
-            )
-            .toList(),
-        selectedItemBuilder: (BuildContext context) => currCategories
-            .map(
-              (e) => Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                    child: Image.asset('images/${e.categoryIcon}'),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(e.title),
-                ],
-              ),
-            )
-            .toList(),
+        items: currCategories.map((e) {
+          return DropdownMenuItem<CategoryModel>(
+            value: e,
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 40, child: Image.asset('images/${e.categoryIcon}')),
+                const SizedBox(width: 10),
+                Text(e.title, style: const TextStyle(fontSize: 15)),
+              ],
+            ),
+          );
+        }).toList(),
+        selectedItemBuilder: (BuildContext context) => currCategories.map((e) {
+          return Row(
+            children: [
+              SizedBox(
+                  width: 40, child: Image.asset('images/${e.categoryIcon}')),
+              const SizedBox(width: 10),
+              Text(e.title),
+            ],
+          );
+        }).toList(),
         hint: const Text('Select category',
             style: TextStyle(color: Colors.white)),
         isExpanded: true,
@@ -372,6 +267,90 @@ class _AddScreenState extends State<AddScreen> {
             selectedCategoryItem = value;
           });
         },
+      ),
+    );
+  }
+
+  TextField amountField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      focusNode: amountFocus,
+      controller: amountC,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        labelText: 'Amount',
+        labelStyle: const TextStyle(fontSize: 17),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(width: 2, color: Colors.white),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(width: 2, color: Colors.green),
+        ),
+        errorText: isAmountValid ? null : 'Amount must be greater than 0',
+      ),
+      onChanged: (value) {
+        setState(() {
+          if (value.isEmpty) {
+            isAmountValid = true;
+          } else {
+            isAmountValid =
+                double.tryParse(value) != null && double.parse(value) > 0;
+          }
+        });
+      },
+    );
+  }
+
+  TextField descriptionField() {
+    return TextField(
+      focusNode: explainFocus,
+      controller: explainC,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        labelText: 'Description',
+        labelStyle: const TextStyle(fontSize: 17),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(width: 2, color: Colors.white),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(width: 2, color: Colors.green),
+        ),
+      ),
+    );
+  }
+
+  Container timeField() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      alignment: Alignment.centerLeft,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 2, color: Colors.white),
+      ),
+      width: double.infinity,
+      child: TextButton(
+        onPressed: () async {
+          DateTime? newDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2020, 1, 1),
+            lastDate: DateTime(2030),
+          );
+          if (newDate == null) return;
+          setState(() {
+            date = newDate;
+          });
+        },
+        child: Text(
+          'Date : ${date.day}/${date.month}/${date.year}',
+          style: const TextStyle(fontSize: 15, color: Colors.white),
+        ),
       ),
     );
   }

@@ -24,8 +24,11 @@ class SearchScreenState extends State<SearchScreen> {
   void filterTransactions(String query) {
     final box = Hive.box<Transaction>('transactions');
     filteredTransactions = box.values
-        .where((transaction) =>
-            transaction.description.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (transaction) => transaction.description
+              .toLowerCase()
+              .contains(query.toLowerCase()),
+        )
         .toList();
   }
 
@@ -43,75 +46,79 @@ class SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              cursorColor: primaryColor,
-              controller: searchController,
-              decoration: InputDecoration(
-                labelText: 'Search by description',
-                labelStyle: const TextStyle(color: primaryColor),
-                focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: primaryColor)),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  color: primaryColor,
-                  onPressed: () {
-                    searchController.clear();
-                    filterTransactions('');
-                    setState(() {});
-                  },
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search by description',
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      searchController.clear();
+                      filterTransactions('');
+                      setState(() {});
+                    },
+                  ),
                 ),
+                onChanged: (value) {
+                  filterTransactions(value);
+                  setState(() {});
+                },
               ),
-              onChanged: (value) {
-                filterTransactions(value);
-                setState(() {});
-              },
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredTransactions.length,
-              itemBuilder: (context, index) {
-                final transaction = filteredTransactions[index];
-                return ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset(
-                      'images/${transaction.category.categoryIcon}',
-                      height: 40,
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredTransactions.length,
+                itemBuilder: (context, index) {
+                  final transaction = filteredTransactions[index];
+                  return ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.asset(
+                        'images/${transaction.category.categoryIcon}',
+                        height: 40,
+                      ),
                     ),
-                  ),
-                  title: Text(
-                    transaction.description,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
+                    title: Text(
+                      transaction.description,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  subtitle: Text(
-                    '${transaction.createAt.day}/${transaction.createAt.month}/${transaction.createAt.year}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
+                    subtitle: Text(
+                      '${transaction.createAt.day}/${transaction.createAt.month}/${transaction.createAt.year}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  trailing: Text(
-                    formatCurrency(int.parse(transaction.amount)),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17,
-                      color: transaction.type == 'Expense'
-                          ? Colors.red
-                          : Colors.green,
+                    trailing: Text(
+                      formatCurrency(int.parse(transaction.amount)),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                        color: transaction.type == 'Expense'
+                            ? Colors.red
+                            : Colors.green,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

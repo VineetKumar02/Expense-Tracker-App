@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:expense_tracker/domain/models/category_model.dart';
 import 'package:expense_tracker/domain/models/transaction_model.dart';
 
+
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
@@ -15,7 +16,6 @@ class CategoryScreen extends StatefulWidget {
 
 class CategoryScreenState extends State<CategoryScreen> {
   late Box<CategoryModel> box;
-  // List<CategoryModel> categories = [];
   List<CategoryModel> expenseCategories = [];
   List<CategoryModel> incomeCategories = [];
 
@@ -42,12 +42,6 @@ class CategoryScreenState extends State<CategoryScreen> {
       ...defaultIncomeCategories
     ];
 
-    // categories = [
-    //   CategoryModel( 'Expense', , 'Header'),
-    //   ...expenseCategories,
-    //   CategoryModel( 'Income', 'Header'),
-    //   ...incomeCategories,
-    // ];
     setState(() {});
   }
 
@@ -65,71 +59,58 @@ class CategoryScreenState extends State<CategoryScreen> {
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-              child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: Text(
-              'Income',
-              style: TextStyle(fontSize: 17, color: Colors.green),
-            ),
-          )),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final category = incomeCategories[index];
-                return ListTile(
-                  leading: Image.asset('images/${category.categoryIcon}',
-                      height: 40),
-                  title: Text(category.title),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryDetailsScreen(category: category),
-                      ),
-                    );
-                  },
-                );
-              },
-              childCount: incomeCategories.length,
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildCategorySection('Income', Colors.green, incomeCategories),
+              _buildCategoryList(incomeCategories),
+              _buildCategorySection('Expense', Colors.red, expenseCategories),
+              _buildCategoryList(expenseCategories),
+            ],
           ),
-          const SliverToBoxAdapter(
-              child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: Text('Expense',
-                style: TextStyle(fontSize: 17, color: Colors.red)),
-          )),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final category = expenseCategories[index];
-                return ListTile(
-                  leading: Image.asset('images/${category.categoryIcon}',
-                      height: 40),
-                  title: Text(category.title),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryDetailsScreen(category: category),
-                      ),
-                    );
-                  },
-                );
-              },
-              childCount: expenseCategories.length,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+
+  Widget _buildCategorySection(
+      String title, Color color, List<CategoryModel> categories) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 17, color: color),
+      ),
+    );
+  }
+
+  Widget _buildCategoryList(List<CategoryModel> categories) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        final category = categories[index];
+        return ListTile(
+          leading: Image.asset('images/${category.categoryIcon}', height: 40),
+          title: Text(category.title),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CategoryDetailsScreen(category: category),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
+
 
 class CategoryDetailsScreen extends StatefulWidget {
   final CategoryModel category;
@@ -171,42 +152,45 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: filteredTransactions.length,
-        itemBuilder: (context, index) {
-          final transaction = filteredTransactions[index];
-          return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.asset(
-                'images/${transaction.category.categoryIcon}',
-                height: 40,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView.builder(
+          itemCount: filteredTransactions.length,
+          itemBuilder: (context, index) {
+            final transaction = filteredTransactions[index];
+            return ListTile(
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image.asset(
+                  'images/${transaction.category.categoryIcon}',
+                  height: 40,
+                ),
               ),
-            ),
-            title: Text(
-              transaction.description,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
+              title: Text(
+                transaction.description,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            subtitle: Text(
-              '${transaction.createAt.day}/${transaction.createAt.month}/${transaction.createAt.year}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
+              subtitle: Text(
+                '${transaction.createAt.day}/${transaction.createAt.month}/${transaction.createAt.year}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            trailing: Text(
-              formatCurrency(int.parse(transaction.amount)),
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 17,
-                color:
-                    transaction.type == 'Expense' ? Colors.red : Colors.green,
+              trailing: Text(
+                formatCurrency(int.parse(transaction.amount)),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                  color:
+                      transaction.type == 'Expense' ? Colors.red : Colors.green,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

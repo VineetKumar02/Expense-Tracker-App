@@ -30,13 +30,13 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.category)
+      ..write(obj.type)
       ..writeByte(1)
-      ..write(obj.description)
+      ..write(obj.category)
       ..writeByte(2)
       ..write(obj.amount)
       ..writeByte(3)
-      ..write(obj.type)
+      ..write(obj.description)
       ..writeByte(4)
       ..write(obj.createAt);
   }

@@ -5,14 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
 // Future<void> clearData() async {
-//   final appDocumentDirectory =
-//       await path_provider.getApplicationDocumentsDirectory();
-//   Hive.init(appDocumentDirectory.path);
-//   await Hive.deleteFromDisk();
+//   await Hive.initFlutter();
+//   Hive.registerAdapter(TransactionAdapter());
+//   Hive.registerAdapter(CategoryModelAdapter());
+
+//   // Open both boxes
+//   await Hive.openBox<Transaction>('transactions');
+//   await Hive.openBox<CategoryModel>('categories');
+
+//   // Clear data from both boxes
+//   await Hive.box<Transaction>('transactions').clear();
+//   await Hive.box<CategoryModel>('categories').clear();
+
+//   // Close Hive
+//   await Hive.close();
 // }
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await clearData();
   await Hive.initFlutter();
   Hive.registerAdapter(TransactionAdapter());

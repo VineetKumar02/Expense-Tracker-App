@@ -15,8 +15,7 @@ class Bottom extends StatefulWidget {
 
 class _BottomState extends State<Bottom> {
   int indexColor = 0;
-  // ignore: non_constant_identifier_names
-  List Screen = [
+  List screens = [
     const Home(),
     const Statistics(),
     const CategoryScreen(),
@@ -36,102 +35,62 @@ class _BottomState extends State<Bottom> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    indexColor = 0;
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: indexColor == index
-                    //     ? const Color.fromARGB(255, 47, 125, 121)
-                    //     : Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.home,
-                    size: 30,
-                    color: indexColor == 0 ? primaryColor : secondaryColor,
-                  ),
-                )),
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    indexColor = 1;
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: indexColor == index
-                    //     ? const Color.fromARGB(255, 47, 125, 121)
-                    //     : Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.bar_chart_outlined,
-                    size: 30,
-                    color: indexColor == 1 ? primaryColor : secondaryColor,
-                  ),
-                )),
-            const SizedBox(
-              width: 20,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  indexColor = 0;
+                });
+              },
+              icon: Icon(
+                Icons.home,
+                size: 30,
+                color: indexColor == 0 ? primaryColor : secondaryColor,
+              ),
             ),
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    indexColor = 2;
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: indexColor == index
-                    //     ? const Color.fromARGB(255, 47, 125, 121)
-                    //     : Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.category_outlined,
-                    size: 30,
-                    color: indexColor == 2 ? Colors.blue : secondaryColor,
-                  ),
-                )),
-            GestureDetector(
-                onTap: () {
-                  setState(() {
-                    indexColor = 3;
-                  });
-                },
-                child: Container(
-                  height: 40,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.search_outlined,
-                    size: 30,
-                    color: indexColor == 3 ? Colors.blue : secondaryColor,
-                  ),
-                )),
-          ]),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  indexColor = 1;
+                });
+              },
+              icon: Icon(
+                Icons.bar_chart_outlined,
+                size: 30,
+                color: indexColor == 1 ? primaryColor : secondaryColor,
+              ),
+            ),
+            const SizedBox(width: 10),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  indexColor = 2;
+                });
+              },
+              icon: Icon(
+                Icons.category_outlined,
+                size: 30,
+                color: indexColor == 2 ? primaryColor : secondaryColor,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  indexColor = 3;
+                });
+              },
+              icon: Icon(
+                Icons.search_outlined,
+                size: 30,
+                color: indexColor == 3 ? primaryColor : secondaryColor,
+              ),
+            ),
+          ],
         ),
       ),
-      body: Screen[indexColor],
+      body: screens[indexColor],
     );
   }
 }
