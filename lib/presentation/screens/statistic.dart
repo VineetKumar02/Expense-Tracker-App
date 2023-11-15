@@ -1,9 +1,9 @@
-import 'package:expanse_management/Constants/color.dart';
-import 'package:expanse_management/presentation/widgets/circular_chart.dart';
-import 'package:expanse_management/presentation/widgets/column_chart.dart';
-// import 'package:expanse_management/presentation/widgets/spline_chart.dart';
-import 'package:expanse_management/data/utilty.dart';
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/Constants/color.dart';
+import 'package:expense_tracker/presentation/widgets/circular_chart.dart';
+import 'package:expense_tracker/presentation/widgets/column_chart.dart';
+// import 'package:expense_tracker/presentation/widgets/spline_chart.dart';
+import 'package:expense_tracker/data/utilty.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -71,8 +71,18 @@ class _StatisticsState extends State<Statistics>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: ValueListenableBuilder<int>(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        title: const Text('Statistics'),
+        centerTitle: true,
+        toolbarHeight: 60,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
+      ),
+      body: ValueListenableBuilder<int>(
         valueListenable: notifier,
         builder: (BuildContext context, int value, Widget? child) {
           // print(value);
@@ -87,7 +97,7 @@ class _StatisticsState extends State<Statistics>
           fetchTransactions();
           return customScrollView();
         },
-      )),
+      ),
     );
   }
 
@@ -96,17 +106,7 @@ class _StatisticsState extends State<Statistics>
       slivers: [
         SliverToBoxAdapter(
           child: Column(children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Statistics',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
@@ -134,9 +134,8 @@ class _StatisticsState extends State<Statistics>
                         width: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: indexColor == index
-                              ? primaryColor
-                              : Colors.white,
+                          color:
+                              indexColor == index ? primaryColor : Colors.white,
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -155,9 +154,7 @@ class _StatisticsState extends State<Statistics>
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 20),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
@@ -190,9 +187,7 @@ class _StatisticsState extends State<Statistics>
                               fetchTransactions();
                             },
                             icon: const Icon(Icons.arrow_back_ios_new)),
-                        const SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         IconButton(
                             onPressed: () {
                               setState(() {
@@ -240,9 +235,7 @@ class _StatisticsState extends State<Statistics>
                 },
               ),
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             isCircularChartSelected
                 ? Column(
                     children: [
@@ -261,9 +254,7 @@ class _StatisticsState extends State<Statistics>
                     currIndex: indexColor,
                   ),
 
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 20),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -282,12 +273,12 @@ class _StatisticsState extends State<Statistics>
                               size: 19,
                             ),
                           ),
-                          SizedBox(width: 7),
+                          SizedBox(width: 10),
                           Text(
                             'Income',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 15,
+                              fontSize: 17,
                               color: Colors.green,
                             ),
                           ),
@@ -297,15 +288,13 @@ class _StatisticsState extends State<Statistics>
                         formatCurrency(totalIn),
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
+                          fontSize: 17,
                           color: Colors.green,
                         ),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -319,12 +308,12 @@ class _StatisticsState extends State<Statistics>
                               size: 19,
                             ),
                           ),
-                          SizedBox(width: 7),
+                          SizedBox(width: 10),
                           Text(
                             'Expenses',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 15,
+                              fontSize: 17,
                               color: Colors.red,
                             ),
                           ),
@@ -334,23 +323,19 @@ class _StatisticsState extends State<Statistics>
                         formatCurrency(totalEx),
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
+                          fontSize: 17,
                           color: Colors.red,
                         ),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 10),
                   const Divider(
                     height: 1,
                     color: Colors.grey,
                     thickness: 1,
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -378,9 +363,7 @@ class _StatisticsState extends State<Statistics>
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 30),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Row(
@@ -388,9 +371,7 @@ class _StatisticsState extends State<Statistics>
                 children: [
                   Text(
                     'Top Spending',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Icon(
                     Icons.swap_vert,
@@ -408,11 +389,11 @@ class _StatisticsState extends State<Statistics>
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.asset(
-                    'images/${currListTransaction[index].category.categoryImage}',
+                    'images/${currListTransaction[index].category.categoryIcon}',
                     height: 40),
               ),
               title: Text(
-                currListTransaction[index].notes,
+                currListTransaction[index].description,
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,

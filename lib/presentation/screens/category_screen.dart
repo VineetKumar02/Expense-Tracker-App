@@ -1,13 +1,13 @@
-import 'package:expanse_management/Constants/color.dart';
-import 'package:expanse_management/Constants/default_categories.dart';
-import 'package:expanse_management/data/utilty.dart';
+import 'package:expense_tracker/Constants/color.dart';
+import 'package:expense_tracker/Constants/default_categories.dart';
+import 'package:expense_tracker/data/utilty.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:expanse_management/domain/models/category_model.dart';
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/domain/models/category_model.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({super.key});
 
   @override
   CategoryScreenState createState() => CategoryScreenState();
@@ -57,12 +57,19 @@ class CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: const Text('Categories'),
+        centerTitle: true,
+        toolbarHeight: 60,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
       ),
       body: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(15.0),
             child: Text(
               'Income',
               style: TextStyle(fontSize: 17, color: Colors.green),
@@ -73,7 +80,7 @@ class CategoryScreenState extends State<CategoryScreen> {
               (context, index) {
                 final category = incomeCategories[index];
                 return ListTile(
-                  leading: Image.asset('images/${category.categoryImage}',
+                  leading: Image.asset('images/${category.categoryIcon}',
                       height: 40),
                   title: Text(category.title),
                   onTap: () {
@@ -92,7 +99,7 @@ class CategoryScreenState extends State<CategoryScreen> {
           ),
           const SliverToBoxAdapter(
               child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(15.0),
             child: Text('Expense',
                 style: TextStyle(fontSize: 17, color: Colors.red)),
           )),
@@ -101,7 +108,7 @@ class CategoryScreenState extends State<CategoryScreen> {
               (context, index) {
                 final category = expenseCategories[index];
                 return ListTile(
-                  leading: Image.asset('images/${category.categoryImage}',
+                  leading: Image.asset('images/${category.categoryIcon}',
                       height: 40),
                   title: Text(category.title),
                   onTap: () {
@@ -127,8 +134,7 @@ class CategoryScreenState extends State<CategoryScreen> {
 class CategoryDetailsScreen extends StatefulWidget {
   final CategoryModel category;
 
-  const CategoryDetailsScreen({Key? key, required this.category})
-      : super(key: key);
+  const CategoryDetailsScreen({super.key, required this.category});
 
   @override
   State<CategoryDetailsScreen> createState() => _CategoryDetailsScreenState();
@@ -157,6 +163,13 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
       appBar: AppBar(
         title: Text(widget.category.title),
         backgroundColor: primaryColor,
+        centerTitle: true,
+        toolbarHeight: 70,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: filteredTransactions.length,
@@ -166,12 +179,12 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
-                'images/${transaction.category.categoryImage}',
+                'images/${transaction.category.categoryIcon}',
                 height: 40,
               ),
             ),
             title: Text(
-              transaction.notes,
+              transaction.description,
               style: const TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w600,

@@ -1,9 +1,9 @@
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
-import 'package:expanse_management/Constants/color.dart';
+import 'package:expense_tracker/Constants/color.dart';
 
 class ColumnChart extends StatefulWidget {
   final List<Transaction> transactions;
@@ -107,7 +107,7 @@ class _ColumnChartState extends State<ColumnChart> {
           numberFormat: NumberFormat.compact(),
           // maximum: 20000000,
         ),
-        legend: Legend(
+        legend: const Legend(
           isVisible: true,
           position: LegendPosition.bottom,
           toggleSeriesVisibility: true,

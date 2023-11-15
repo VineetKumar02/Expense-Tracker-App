@@ -1,4 +1,4 @@
-import 'package:expanse_management/domain/models/category_model.dart';
+import 'package:expense_tracker/domain/models/category_model.dart';
 
 final List<CategoryModel> defaultIncomeCategories = [
   CategoryModel('Salary', 'Salary.png', 'Income'),

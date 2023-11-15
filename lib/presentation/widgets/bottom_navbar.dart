@@ -1,9 +1,9 @@
-import 'package:expanse_management/Constants/color.dart';
-import 'package:expanse_management/presentation/screens/add_transaction.dart';
-import 'package:expanse_management/presentation/screens/category_screen.dart';
-import 'package:expanse_management/presentation/screens/home.dart';
-import 'package:expanse_management/presentation/screens/search_screen.dart';
-import 'package:expanse_management/presentation/screens/statistic.dart';
+import 'package:expense_tracker/Constants/color.dart';
+import 'package:expense_tracker/presentation/screens/add_transaction.dart';
+import 'package:expense_tracker/presentation/screens/category_screen.dart';
+import 'package:expense_tracker/presentation/screens/home.dart';
+import 'package:expense_tracker/presentation/screens/search_screen.dart';
+import 'package:expense_tracker/presentation/screens/statistic.dart';
 import 'package:flutter/material.dart';
 
 class Bottom extends StatefulWidget {

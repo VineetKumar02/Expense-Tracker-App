@@ -1,6 +1,6 @@
-import 'package:expanse_management/Constants/days.dart';
-import 'package:expanse_management/data/utilty.dart';
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/Constants/days.dart';
+import 'package:expense_tracker/data/utilty.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -25,49 +25,47 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ValueListenableBuilder(
-            valueListenable: box.listenable(),
-            builder: (context, value, child) {
-              return CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 340, child: _head()),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Transactions History',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 19,
-                            ),
+      body: ValueListenableBuilder(
+          valueListenable: box.listenable(),
+          builder: (context, value, child) {
+            return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 300, child: _head()),
+                ),
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Transactions History',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 19,
                           ),
-                          Text(
-                            'See all',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: Colors.grey,
-                            ),
+                        ),
+                        Text(
+                          'See all',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.grey,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                    transactionHistory = box.values.toList()[index];
-                    return listTransaction(transactionHistory, index);
-                  }, childCount: box.length)),
-                ],
-              );
-            }),
-      ),
+                ),
+                SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                  transactionHistory = box.values.toList()[index];
+                  return listTransaction(transactionHistory, index);
+                }, childCount: box.length)),
+              ],
+            );
+          }),
     );
   }
 
@@ -106,12 +104,11 @@ class _HomeState extends State<Home> {
     return ListTile(
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: Image.asset(
-            'images/${transactionHistory.category.categoryImage}',
+        child: Image.asset('images/${transactionHistory.category.categoryIcon}',
             height: 40),
       ),
       title: Text(
-        transactionHistory.notes,
+        transactionHistory.description,
         style: const TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.w600,
@@ -143,7 +140,7 @@ Stack _head() {
         children: [
           Container(
             width: double.infinity,
-            height: 240,
+            height: 200,
             decoration: const BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.only(

@@ -7,10 +7,10 @@ class CategoryModel extends HiveObject {
   String title;
 
   @HiveField(1)
-  String categoryImage;
+  String categoryIcon;
 
   @HiveField(2)
   String type; // Income or Expense
 
-  CategoryModel(this.title, this.categoryImage, this.type);
+  CategoryModel(this.title, this.categoryIcon, this.type);
 }

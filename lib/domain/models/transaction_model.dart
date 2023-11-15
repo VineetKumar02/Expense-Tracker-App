@@ -6,19 +6,19 @@ part 'transaction_model.g.dart';
 @HiveType(typeId: 1)
 class Transaction extends HiveObject {
   @HiveField(0)
-  CategoryModel category;
+  String type;
 
   @HiveField(1)
-  String notes;
+  CategoryModel category;
 
   @HiveField(2)
   String amount;
 
   @HiveField(3)
-  String type;
+  String description;
 
   @HiveField(4)
   DateTime createAt;
 
-  Transaction(this.type, this.amount, this.createAt, this.notes, this.category);
+  Transaction(this.type, this.category, this.amount, this.description, this.createAt);
 }

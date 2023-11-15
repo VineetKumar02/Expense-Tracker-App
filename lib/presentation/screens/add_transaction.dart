@@ -1,9 +1,9 @@
-import 'package:expanse_management/Constants/color.dart';
-import 'package:expanse_management/Constants/default_categories.dart';
-import 'package:expanse_management/Constants/limits.dart';
-import 'package:expanse_management/data/utilty.dart';
-import 'package:expanse_management/domain/models/category_model.dart';
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/Constants/color.dart';
+import 'package:expense_tracker/Constants/default_categories.dart';
+import 'package:expense_tracker/Constants/limits.dart';
+import 'package:expense_tracker/data/utilty.dart';
+import 'package:expense_tracker/domain/models/category_model.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -60,11 +60,11 @@ class _AddScreenState extends State<AddScreen> {
     setState(() {
       incomeCategories = [
         ...defaultIncomeCategories,
-        ...box.values.where((category) => category.type == 'Income').toList(),
+        ...box.values.where((category) => category.type == 'Income'),
       ];
       expenseCategories = [
         ...defaultExpenseCategories,
-        ...box.values.where((category) => category.type == 'Expense').toList(),
+        ...box.values.where((category) => category.type == 'Expense'),
       ];
     });
   }
@@ -72,57 +72,43 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        title: const Text('Add Transaction'),
+        centerTitle: true,
+        toolbarHeight: 80,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
+      ),
       body: SafeArea(
-          child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          backgroundAddContainer(context),
-          Positioned(
-            top: 120,
-            child: mainAddContainer(),
-          )
-        ],
-      )),
+        child: Center(child: mainAddContainer()),
+      ),
     );
   }
 
-  Container mainAddContainer() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+  SizedBox mainAddContainer() {
+    return SizedBox(
+      width: 300,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          typeField(),
+          const SizedBox(height: 35),
+          categoryField(),
+          const SizedBox(height: 35),
+          amountField(),
+          const SizedBox(height: 35),
+          descriptionField(),
+          const SizedBox(height: 35),
+          timeField(),
+          // const Spacer(),
+          const SizedBox(height: 35),
+          addTransaction(),
+        ],
       ),
-      height: 680,
-      width: 360,
-      child: Column(children: [
-        const SizedBox(
-          height: 35,
-        ),
-        typeField(),
-        const SizedBox(
-          height: 35,
-        ),
-        noteField(),
-        const SizedBox(
-          height: 35,
-        ),
-        amountField(),
-        const SizedBox(
-          height: 35,
-        ),
-        categoryField(),
-        const SizedBox(
-          height: 35,
-        ),
-        timeField(),
-        // const Spacer(),
-        const SizedBox(
-          height: 35,
-        ),
-        addTransaction(),
-        const SizedBox(
-          height: 20,
-        )
-      ]),
     );
   }
 
@@ -177,8 +163,8 @@ class _AddScreenState extends State<AddScreen> {
               true; // Set the flag to true after showing the warning
           return;
         }
-        var newTransaction = Transaction(selectedTypeItem!, amountC.text, date,
-            explainC.text, selectedCategoryItem!);
+        var newTransaction = Transaction(selectedTypeItem!,
+            selectedCategoryItem!, amountC.text, explainC.text, date);
         boxTransaction.add(newTransaction);
         Navigator.of(context).pop();
 
@@ -208,231 +194,184 @@ class _AddScreenState extends State<AddScreen> {
             borderRadius: BorderRadius.circular(15), color: primaryColor),
         height: 50,
         width: 140,
-        child: const Text(
-          'Add',
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: const Text('Add',
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
       ),
     );
   }
 
-  Padding timeField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        alignment: Alignment.bottomLeft,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 2)),
-        width: double.infinity,
-        child: TextButton(
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2020, 1, 1),
-                lastDate: DateTime(2030));
-            if (newDate == null) return;
-            setState(() {
-              date = newDate;
-            });
-          },
-          child: Text(
-            'Date : ${date.day}/${date.month}/${date.year}',
-            style: const TextStyle(fontSize: 15, color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding amountField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      child: TextField(
-        keyboardType: TextInputType.number,
-        focusNode: amountFocus,
-        controller: amountC,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          labelText: 'Amount',
-          labelStyle: TextStyle(fontSize: 17),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2)),
-          errorText: isAmountValid ? null : 'Amount must be greater than 0',
-        ),
-        onChanged: (value) {
+  Container timeField() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      alignment: Alignment.centerLeft,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(width: 2, color: Colors.white)),
+      width: double.infinity,
+      child: TextButton(
+        onPressed: () async {
+          DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2020, 1, 1),
+              lastDate: DateTime(2030));
+          if (newDate == null) return;
           setState(() {
-            if (value.isEmpty) {
-              isAmountValid =
-                  true; // Reset the validation if the field is empty
-            } else {
-              isAmountValid =
-                  double.tryParse(value) != null && double.parse(value) > 0;
-            }
+            date = newDate;
           });
         },
-      ),
-    );
-  }
-
-  Padding typeField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 2,
-              )),
-          child: DropdownButton<String>(
-            value: selectedTypeItem,
-            items: types
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Row(children: [
-                        SizedBox(
-                          width: 40,
-                          child: Image.asset('images/$e.png'),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          e,
-                          style: const TextStyle(fontSize: 15),
-                        )
-                      ]),
-                    ))
-                .toList(),
-            selectedItemBuilder: (BuildContext context) => types
-                .map((e) => Row(
-                      children: [
-                        SizedBox(
-                          width: 42,
-                          child: Image.asset('images/$e.png'),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(e)
-                      ],
-                    ))
-                .toList(),
-            hint: const Text(
-              'Select Type',
-              style: TextStyle(color: Colors.white),
-            ),
-            isExpanded: true,
-            underline: Container(),
-            onChanged: ((value) {
-              setState(() {
-                selectedTypeItem = value!;
-                selectedCategoryItem = null;
-              });
-            }),
-          )),
-    );
-  }
-
-  Padding noteField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: TextField(
-        focusNode: explainFocus,
-        controller: explainC,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          labelText: 'Notes',
-          labelStyle: TextStyle(fontSize: 17),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(width: 2)),
+        child: Text(
+          'Date : ${date.day}/${date.month}/${date.year}',
+          style: const TextStyle(fontSize: 15, color: Colors.white),
         ),
       ),
     );
   }
 
-  Padding categoryField() {
+  TextField amountField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      focusNode: amountFocus,
+      controller: amountC,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        labelText: 'Amount',
+        labelStyle: const TextStyle(fontSize: 17),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(width: 2, color: Colors.white)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(width: 2, color: Colors.green)),
+        errorText: isAmountValid ? null : 'Amount must be greater than 0',
+      ),
+      onChanged: (value) {
+        setState(() {
+          if (value.isEmpty) {
+            isAmountValid = true; // Reset the validation if the field is empty
+          } else {
+            isAmountValid =
+                double.tryParse(value) != null && double.parse(value) > 0;
+          }
+        });
+      },
+    );
+  }
+
+  Container typeField() {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        width: double.infinity,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 2, color: Colors.white)),
+        child: DropdownButton<String>(
+          value: selectedTypeItem,
+          items: types
+              .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Row(children: [
+                      SizedBox(width: 40, child: Image.asset('images/$e.png')),
+                      const SizedBox(width: 10),
+                      Text(e, style: const TextStyle(fontSize: 15))
+                    ]),
+                  ))
+              .toList(),
+          selectedItemBuilder: (BuildContext context) => types
+              .map((e) => Row(
+                    children: [
+                      SizedBox(width: 40, child: Image.asset('images/$e.png')),
+                      const SizedBox(width: 10),
+                      Text(e)
+                    ],
+                  ))
+              .toList(),
+          hint:
+              const Text('Select Type', style: TextStyle(color: Colors.white)),
+          isExpanded: true,
+          underline: Container(),
+          onChanged: ((value) {
+            setState(() {
+              selectedTypeItem = value!;
+              selectedCategoryItem = null;
+            });
+          }),
+        ));
+  }
+
+  TextField descriptionField() {
+    return TextField(
+      focusNode: explainFocus,
+      controller: explainC,
+      decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        labelText: 'Description',
+        labelStyle: const TextStyle(fontSize: 17),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(width: 2, color: Colors.white)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(width: 2, color: Colors.green)),
+      ),
+    );
+  }
+
+  Container categoryField() {
     final List<CategoryModel> currCategories =
         selectedTypeItem == 'Income' ? incomeCategories : expenseCategories;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 2, color: Colors.white),
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2),
-        ),
-        child: DropdownButton<CategoryModel>(
-          value: selectedCategoryItem,
-          items: currCategories
-              .map(
-                (e) => DropdownMenuItem<CategoryModel>(
-                  value: e,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        child: Image.asset('images/${e.categoryImage}'),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        e.title,
-                        style: const TextStyle(fontSize: 15),
-                      )
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-          selectedItemBuilder: (BuildContext context) => currCategories
-              .map(
-                (e) => Row(
+      child: DropdownButton<CategoryModel>(
+        value: selectedCategoryItem,
+        items: currCategories
+            .map(
+              (e) => DropdownMenuItem<CategoryModel>(
+                value: e,
+                child: Row(
                   children: [
                     SizedBox(
-                      width: 42,
-                      child: Image.asset('images/${e.categoryImage}'),
+                      width: 40,
+                      child: Image.asset('images/${e.categoryIcon}'),
                     ),
-                    const SizedBox(width: 5),
-                    Text(e.title),
+                    const SizedBox(width: 10),
+                    Text(e.title, style: const TextStyle(fontSize: 15))
                   ],
                 ),
-              )
-              .toList(),
-          hint: const Text(
-            'Select category',
-            style: TextStyle(color: Colors.white),
-          ),
-          isExpanded: true,
-          underline: Container(),
-          onChanged: (value) {
-            setState(() {
-              selectedCategoryItem = value;
-            });
-          },
-        ),
+              ),
+            )
+            .toList(),
+        selectedItemBuilder: (BuildContext context) => currCategories
+            .map(
+              (e) => Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: Image.asset('images/${e.categoryIcon}'),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(e.title),
+                ],
+              ),
+            )
+            .toList(),
+        hint: const Text('Select category',
+            style: TextStyle(color: Colors.white)),
+        isExpanded: true,
+        underline: Container(),
+        onChanged: (value) {
+          setState(() {
+            selectedCategoryItem = value;
+          });
+        },
       ),
     );
   }

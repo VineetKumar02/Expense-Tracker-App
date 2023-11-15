@@ -1,11 +1,11 @@
-import 'package:expanse_management/Constants/color.dart';
-import 'package:expanse_management/data/utilty.dart';
+import 'package:expense_tracker/Constants/color.dart';
+import 'package:expense_tracker/data/utilty.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:expanse_management/domain/models/transaction_model.dart';
+import 'package:expense_tracker/domain/models/transaction_model.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   SearchScreenState createState() => SearchScreenState();
@@ -25,7 +25,7 @@ class SearchScreenState extends State<SearchScreen> {
     final box = Hive.box<Transaction>('transactions');
     filteredTransactions = box.values
         .where((transaction) =>
-            transaction.notes.toLowerCase().contains(query.toLowerCase()))
+            transaction.description.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
 
@@ -35,6 +35,13 @@ class SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: const Text('Search'),
+        centerTitle: true,
+        toolbarHeight: 60,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -44,7 +51,7 @@ class SearchScreenState extends State<SearchScreen> {
               cursorColor: primaryColor,
               controller: searchController,
               decoration: InputDecoration(
-                labelText: 'Search by notes',
+                labelText: 'Search by description',
                 labelStyle: const TextStyle(color: primaryColor),
                 focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: primaryColor)),
@@ -73,12 +80,12 @@ class SearchScreenState extends State<SearchScreen> {
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.asset(
-                      'images/${transaction.category.categoryImage}',
+                      'images/${transaction.category.categoryIcon}',
                       height: 40,
                     ),
                   ),
                   title: Text(
-                    transaction.notes,
+                    transaction.description,
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,

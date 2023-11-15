@@ -30,7 +30,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.categoryImage)
+      ..write(obj.categoryIcon)
       ..writeByte(2)
       ..write(obj.type);
   }
