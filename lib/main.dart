@@ -22,7 +22,7 @@ import 'package:hive_flutter/adapters.dart';
 // }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   // await clearData();
   await Hive.initFlutter();
   Hive.registerAdapter(TransactionAdapter());

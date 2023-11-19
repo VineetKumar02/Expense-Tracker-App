@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:expense_tracker/Constants/color.dart';
 import 'package:expense_tracker/presentation/screens/add_transaction.dart';
 import 'package:expense_tracker/presentation/screens/category_screen.dart';
 import 'package:expense_tracker/presentation/screens/home.dart';
 import 'package:expense_tracker/presentation/screens/search_screen.dart';
 import 'package:expense_tracker/presentation/screens/statistic.dart';
-import 'package:flutter/material.dart';
 
 class Bottom extends StatefulWidget {
   const Bottom({super.key});
@@ -19,19 +19,22 @@ class _BottomState extends State<Bottom> {
     const Home(),
     const Statistics(),
     const CategoryScreen(),
-    const SearchScreen()
+    const SearchScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const AddScreen()));
-        },
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
-      ),
+      floatingActionButton: indexColor == 0 // Check if it's the home page
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AddScreen()),
+                );
+              },
+              child: const Icon(Icons.add, color: Colors.white, size: 30),
+            )
+          : null, // If not the home page, set to null to hide
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -62,7 +65,6 @@ class _BottomState extends State<Bottom> {
                 color: indexColor == 1 ? primaryColor : secondaryColor,
               ),
             ),
-            const SizedBox(width: 10),
             IconButton(
               onPressed: () {
                 setState(() {

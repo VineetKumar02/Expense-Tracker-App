@@ -14,7 +14,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Transaction transactionHistory;
-  final box = Hive.box<Transaction>('transactions');
+  late Box<Transaction> box = Hive.box<Transaction>('transactions');
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +54,17 @@ class _HomeState extends State<Home> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: box.length,
-                itemBuilder: (context, index) {
-                  transactionHistory = box.values.toList()[index];
-                  return _buildTransactionItem(index, transactionHistory);
+              child: ValueListenableBuilder(
+                valueListenable: box.listenable(),
+                builder: (context, Box<Transaction> box, _) {
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: box.length,
+                    itemBuilder: (context, index) {
+                      transactionHistory = box.getAt(index)!;
+                      return _buildTransactionItem(index, transactionHistory);
+                    },
+                  );
                 },
               ),
             ),
