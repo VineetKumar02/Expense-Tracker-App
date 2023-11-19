@@ -114,42 +114,72 @@ class _StatisticsState extends State<Statistics>
           const SizedBox(height: 20),
           buildTransactionSummary(),
           const SizedBox(height: 30),
-          buildTopSpendingHeader(),
-          buildTransactionList(),
+          buildTopTransactionHeader("Income"),
+          buildTopIncomeList(), // Show top income transactions
+          const SizedBox(height: 20),
+          buildTopTransactionHeader("Expense"),
+          buildTopExpenseList(), // Show top expense transactions
         ],
       ),
     );
   }
 
-  Widget buildTransactionList() {
+  Padding buildTopTransactionHeader(String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Top $label',
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Icon(Icons.swap_vert, size: 25, color: Colors.grey),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTopIncomeList() {
+    List<Transaction> topIncomeList =
+        getTopIncomeTransactions(currListTransaction);
+    return buildTransactionList(topIncomeList);
+  }
+
+  Widget buildTopExpenseList() {
+    List<Transaction> topExpenseList =
+        getTopExpenseTransactions(currListTransaction);
+    return buildTransactionList(topExpenseList);
+  }
+
+  Widget buildTransactionList(List<Transaction> transactions) {
     return Flexible(
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: currListTransaction.length,
+        itemCount: transactions.length,
         itemBuilder: (context, index) {
           return ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
-                'images/${currListTransaction[index].category.categoryIcon}',
+                'images/${transactions[index].category.categoryIcon}',
                 height: 40,
               ),
             ),
             title: Text(
-              currListTransaction[index].description,
+              transactions[index].description,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
-              '${currListTransaction[index].createAt.day}/${currListTransaction[index].createAt.month}/${currListTransaction[index].createAt.year}',
+              '${transactions[index].createAt.day}/${transactions[index].createAt.month}/${transactions[index].createAt.year}',
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             trailing: Text(
-              formatCurrency(int.parse(currListTransaction[index].amount)),
+              formatCurrency(int.parse(transactions[index].amount)),
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
-                color: currListTransaction[index].type == 'Expense'
+                color: transactions[index].type == 'Expense'
                     ? Colors.red
                     : Colors.green,
               ),
@@ -337,20 +367,6 @@ class _StatisticsState extends State<Statistics>
               fontWeight: FontWeight.w500, fontSize: 17, color: color),
         ),
       ],
-    );
-  }
-
-  Padding buildTopSpendingHeader() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Top Spending',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Icon(Icons.swap_vert, size: 25, color: Colors.grey),
-        ],
-      ),
     );
   }
 }

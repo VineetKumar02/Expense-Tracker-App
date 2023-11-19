@@ -135,10 +135,11 @@ class _CircularChartState extends State<CircularChart> {
                   xValueMapper: (ChartData data, _) => data.x,
                   yValueMapper: (ChartData data, _) => data.y,
                   dataLabelMapper: (ChartData data, _) =>
-                      '${NumberFormat.compactCurrency(
+                      NumberFormat.compactCurrency(
                         symbol: '',
-                        decimalDigits: 1,
-                      ).format(data.y / 1000000)}M',
+                        decimalDigits:
+                            0, // Set decimalDigits to 0 for displaying thousands
+                      ).format(data.y),
                   animationDuration: 1000,
                   dataLabelSettings: const DataLabelSettings(
                       showZeroValue: true,

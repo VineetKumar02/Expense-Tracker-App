@@ -147,6 +147,26 @@ List<Transaction> getTransactionYear(DateTime selectedDate) {
   return result;
 }
 
+List<Transaction> getTopIncomeTransactions(List<Transaction> transactions) {
+  List<Transaction> incomeList = transactions
+      .where((transaction) => transaction.type == 'Income')
+      .toList();
+
+  incomeList.sort((a, b) => int.parse(b.amount) - int.parse(a.amount));
+
+  return incomeList.take(5).toList();
+}
+
+List<Transaction> getTopExpenseTransactions(List<Transaction> transactions) {
+  List<Transaction> expenseList = transactions
+      .where((transaction) => transaction.type == 'Expense')
+      .toList();
+
+  expenseList.sort((a, b) => int.parse(b.amount) - int.parse(a.amount));
+
+  return expenseList.take(5).toList();
+}
+
 int totalChart(List<Transaction> transactions) {
   List listAmount = [0, 0];
   for (var i = 0; i < transactions.length; i++) {
